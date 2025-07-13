@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block content %}
+  <h2>{{ product.name }}</h2>
+  <p>{{ product.description }}</p>
+  <p>Price: ${{ product.price }}</p>
+  <p>Average Rating: {{ average_rating|floatformat:1|default:"No reviews" }}</p>
+
+  <h3>Reviews</h3>
+  {% for review in reviews %}
+    <div>
+      <p>User: {{ review.user.username }}</p>
+      <p>Rating: {{ review.rating }}/5</p>
+      <p>{{ review.feedback }}</p>
+    </div>
+  {% empty %}
+    <p>No reviews yet.</p>
+  {% endfor %}
+
+  {% if can_review %}
+    <a href="{% url 'review_add' product.id %}">Submit a Review</a>
+  {% endif %}
+
+  {% if user.is_staff %}
+    <a href="{% url 'product_edit' product.id %}">Edit</a>
+    <a href="{% url 'product_delete' product.id %}">Delete</a>
+  {% endif %}
+{% endblock %}
